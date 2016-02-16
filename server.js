@@ -9,11 +9,19 @@ var LEX = require('letsencrypt-express');
 var winston = require('winston'),
     expressWinston = require('express-winston');
 
+var privateKey = fs.readFileSync('./cert/private-key.pem', 'utf8');
+var certificate = fs.readFileSync('./cert/certificate.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate,
+                   //requestCert: true, rejectUnauthorized: true
+                   requestCert: true
+                   };
 // this code is largely taken from
 // https://github.com/matt-kruse/alexa-app-server
 
 // Start up the server
 var expressApp = express();
+var httpsServer = https.createServer(credentials, expressApp);
+
 expressApp.use(bodyParser.urlencoded({ extended: true }));
 expressApp.use(bodyParser.json());
 
@@ -51,32 +59,32 @@ expressApp.get(endpoint,function(req,res) {
     res.render('test',{"app":app,"schema":app.schema(),"utterances":app.utterances(),"intents":app.intents});
 });
 
-LEX.create({
-  debug: true,
-  configDir: './letsencrypt.config'                 // ~/letsencrypt, /etc/letsencrypt, whatever you want
+// LEX.create({
+//   debug: true,
+//   configDir: './letsencrypt.config'                 // ~/letsencrypt, /etc/letsencrypt, whatever you want
 
-, onRequest: expressApp                                    // your express app (or plain node http app)
+// , onRequest: expressApp                                    // your express app (or plain node http app)
 
-, letsencrypt: null                                 // you can provide you own instance of letsencrypt
-                                                    // if you need to configure it (with an agreeToTerms
-                                                    // callback, for example)
+// , letsencrypt: null                                 // you can provide you own instance of letsencrypt
+//                                                     // if you need to configure it (with an agreeToTerms
+//                                                     // callback, for example)
 
-, approveRegistration: function (hostname, cb) {    // PRODUCTION MODE needs this function, but only if you want
-                                                    // automatic registration (usually not necessary)
-                                                    // renewals for registered domains will still be automatic
-    if (hostname !== 'goetter.duckdns.org') {
-      console.log('Bad domain', hostname);
-      cb(null, null);
-    }
-    cb(null, {
-      domains: [hostname]
-    , email: 'ian133@gmail.com'
-    , agreeTos: true              // you
-    });
-  }
-}).listen([80], [443], function () {
-  console.log("ENCRYPT __ALL__ THE DOMAINS!");
-});
+// , approveRegistration: function (hostname, cb) {    // PRODUCTION MODE needs this function, but only if you want
+//                                                     // automatic registration (usually not necessary)
+//                                                     // renewals for registered domains will still be automatic
+//     if (hostname !== 'goetter.duckdns.org') {
+//       console.log('Bad domain', hostname);
+//       cb(null, null);
+//     }
+//     cb(null, {
+//       domains: [hostname]
+//     , email: 'ian133@gmail.com'
+//     , agreeTos: true              // you
+//     });
+//   }
+// }).listen([80], [443,9191], function () {
+//   console.log("ENCRYPT __ALL__ THE DOMAINS!");
+// });
 
 
 
@@ -84,5 +92,5 @@ LEX.create({
 //expressApp.use(express.static('public_html'));
 
 //expressApp.listen(PORT);
-//httpsServer.listen(PORT);
+httpsServer.listen(443);
 //console.log("Listening.);
