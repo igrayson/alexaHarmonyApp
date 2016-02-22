@@ -7,12 +7,20 @@
   "license": "MIT",
   "dependencies": {
     "alexa-app": "^2.1.0",
+    "babel": "^5.8.29",
+    "babel-core": "^5.8.29",
+    "babel-runtime": "^5.8.29",
+    "bluebird": "^3.3.1",
     "body-parser": "~1.0.1",
     "ejs": "~0.7.1",
     "express": "~4.0.0",
     "express-winston": "^1.2.0",
     "harmony-hub-util": "^1.0.5",
-    "letsencrypt-express": "^1.1.0",
-    "winston": "^2.1.1"
+    "lodash": "^4.4.0",
+    "superagent": "^1.7.2",
+    "superagent-bluebird-promise": "^3.0.0",
+    "winston": "^2.1.1",
+    "wol": "^1.0.3",
+    "xml-parser": "^1.2.1"
   }
 }
