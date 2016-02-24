@@ -1,2 +1,2 @@
 require('babel/register');
-module.exports = require('./remote.es6.js');
+module.exports = require('./es6/remote.js');

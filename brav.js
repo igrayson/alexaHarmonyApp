@@ -1,2 +1,2 @@
 require('babel/register');
-require('./brav.es6.js');
+require('./es6/brav.js');
