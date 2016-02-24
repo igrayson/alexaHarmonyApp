@@ -5,7 +5,6 @@ var express = require('express');
 var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
 var https = require('https');
-var LEX = require('letsencrypt-express');
 var winston = require('winston'),
     expressWinston = require('express-winston');
 
@@ -46,8 +45,7 @@ expressApp.set('view engine', 'ejs');
 // Register Alexa apps
 //register_apps('./','/');
 var app = require('./remote.js');
-var endpoint = '/remote';
-expressApp.post(endpoint,function(req,res) {
+expressApp.post('/remote', function(req,res) {
     app.request(req.body).then(function(response) {
         res.json(response);
     },function(response) {
@@ -55,8 +53,12 @@ expressApp.post(endpoint,function(req,res) {
     });
 });
 // Configure GET requests to run a debugger UI
-expressApp.get(endpoint,function(req,res) {
+expressApp.get('/remote', function(req,res) {
     res.render('test',{"app":app,"schema":app.schema(),"utterances":app.utterances(),"intents":app.intents});
+});
+
+expressApp.get('/ha-bridge', function(req, res) {
+  res.status(200).json({});
 });
 
 // LEX.create({
@@ -91,7 +93,7 @@ expressApp.get(endpoint,function(req,res) {
 // Serve static files
 //expressApp.use(express.static('public_html'));
 
-//expressApp.listen(PORT);
+expressApp.listen(80);
 httpsServer.listen(443);
 //console.log("Listening.);
 //

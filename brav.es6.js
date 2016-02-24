@@ -144,8 +144,8 @@ export default class IRCCClient {
 }
 
 
+const client = new IRCCClient('192.168.0.13', 50002, 50001);
 (async function() {
-// const client = new IRCCClient('192.168.0.13', 50002, 50001);
   // await client.sendCommand(IRCC_COMMANDS['STR:PowerMain']);
   // await client.sendCommand('AAAAAgAAABoAAABaAw==');
   // await client.sendCommand(IRCC_COMMANDS.VolumeUp);

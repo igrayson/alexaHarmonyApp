@@ -6,7 +6,21 @@ import Promise from 'bluebird';
 import _ from 'lodash';
 import wol from 'wol';
 
+import { NodeCec, CEC } from 'node-cec';
+
+
 const wake = Promise.promisify(wol.wake);
+
+let cecClient;
+const cec = new NodeCec('node-cec-monitor');
+cec.once('ready', client => {
+  console.log('cec-client ready.');
+  cecClient = client;
+});
+// -m  = start in monitor-mode 
+// -d8 = set log level to 8 (=TRAFFIC) (-d 8) 
+// -br = logical address set to `recording device` 
+cec.start( 'cec-client', '-m', '-d', '8', '-b', 'r' );
 
 // var alexa = require('alexa-app'),
 //     HarmonyUtils = require('harmony-hub-util'),
@@ -189,16 +203,6 @@ app.intent('MuteVolume',
 //         });
 //     });
 
-// app.intent('TurnOffTV',
-//     {
-//         "slots" : {},
-//         "utterances" : ["{turn the TV off|turn TV off}"]
-//     },
-//     function (req, res) {
-//         res.say('Turning TV off!');
-//         console.log('Turning TV off!');
-//     });
-
 // app.intent('TurnOnTV',
 //     {
 //         "slots" : {},
@@ -235,36 +239,53 @@ app.intent('MuteVolume',
 //         });
 //     });
 
-app.intent('TurnOff',
+app.intent('TurnOnTV',
     {
         "slots" : {},
-        "utterances" : ["{shutdown|good night|turn off|power everything off|power off everything|turn everything off|turn off everything|shut down}"]
+        "utterances" : ["{turn on the TV|turn the TV on|turn on TV|turn TV on}"],
+    },
+    async function (req, res) {
+        res.say('Turning on TV!');
+        console.log('Turning on TV!');
+	cecClient.send('on 0');
+    });
+
+app.intent('TurnOffTV',
+    {
+        "slots" : {},
+        "utterances" : ["{turn the TV off|turn TV off}"],
     },
     async function (req, res) {
         res.say('Turning off TV!');
-        console.log('Turning off everything!');
-        await bravia.sendCommand(IRCC_COMMANDS['STR:PowerMain']);
+        console.log('Turning off TV!');
         await samsungSend('KEY_POWEROFF');
-
-        // execActivity('PowerOff', function (res) {
-        //     console.log("Command to PowerOff executed with result : " + res);
-        // });
     });
 
 app.intent('TurnOff',
+    {
+        "slots" : {},
+        "utterances" : ["{turn off|turn everything off|power off|power everything off|go to sleep|sleep}"]
+    },
+    async function (req, res) {
+        res.say('Turning theater off.');
+        console.log('Turning off everything!');
+        bravia.sendCommand(IRCC_COMMANDS['STR:PowerMain']);
+        samsungSend('KEY_POWEROFF');
+    });
+
+app.intent('Turnon',
     {
         "slots" : {},
         "utterances" : ["{start|turn on|wake up|power everything on|power on everything|turn everything on}"]
     },
     async function (req, res) {
         res.say('Turning on theater.');
-        console.log('Turning on everything!');
-        await bravia.sendCommand(IRCC_COMMANDS['STR:PowerMain']);
-        await samsungSend('KEY_POWEROFF');
-
-        // execActivity('PowerOff', function (res) {
-        //     console.log("Command to PowerOff executed with result : " + res);
-        // });
+        console.log('Turning on everything!', config.bravia_mac);
+        cecClient.send('on 0');
+	wol.wake(config.bravia_mac);
+	//await wake(config.bravia_mac);
+        console.log('Turned on theater.');
     });
 
 module.exports = app;
+
