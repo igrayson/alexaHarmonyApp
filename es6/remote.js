@@ -1,7 +1,7 @@
 import alexa from 'alexa-app';
 import _ from 'lodash';
 
-import actions from './actions';
+import * as actions from './actions';
 import config from '../config';
 
 // Define an alexa-app

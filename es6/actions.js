@@ -33,23 +33,32 @@ const samsung = new SamsungRemote({ip: config.samsung_ip});
 const samsungSend = Promise.promisify(samsung.send);
 
 export async function increaseVolume(units=5) {
+  console.log('Increasing volume by', units);
   await* _.times(units, () => bravia.sendCommand(IRCC_COMMANDS.VolumeUp));
+  console.log('Volume increase succeeded.');
 }
 
 export async function decreaseVolume(units=5) {
+  console.log('Decreasing volume by', units);
   await* _.times(units, () => bravia.sendCommand(IRCC_COMMANDS.VolumeDown));
+  console.log('Volume decrease succeeded.');
 }
 
 export async function muteVolume() {
+  console.log('Muting volume.');
   await bravia.sendCommand(IRCC_COMMANDS.Mute)
+  console.log('Mute succeeded.');
 }
 
 export async function turnOnTV() {
+  console.log('Turning on tv (cec-client on 0).');
   cecClient.send('on 0');
 }
 
 export async function turnOffTV() {
+  console.log('Turning off tv.');
   await samsungSend('KEY_POWEROFF');
+  console.log('Turning off tv successful.');
 }
 
 export async function turnOnAVR() {
