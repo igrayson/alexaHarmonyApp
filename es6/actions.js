@@ -33,12 +33,20 @@ const samsung = new SamsungRemote({ip: config.samsung_ip});
 const samsungSend = Promise.promisify(samsung.send);
 
 export async function increaseVolume(units=5) {
+  if (units > 15) {
+    console.log('Reducing units', units, 'to 15');
+    units = 15;
+  }
   console.log('Increasing volume by', units);
   await* _.times(units, () => bravia.sendCommand(IRCC_COMMANDS.VolumeUp));
   console.log('Volume increase succeeded.');
 }
 
 export async function decreaseVolume(units=5) {
+  if (units > 15) {
+    console.log('Reducing units', units, 'to 15');
+    units = 15;
+  }
   console.log('Decreasing volume by', units);
   await* _.times(units, () => bravia.sendCommand(IRCC_COMMANDS.VolumeDown));
   console.log('Volume decrease succeeded.');
