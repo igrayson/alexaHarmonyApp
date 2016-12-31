@@ -65,7 +65,8 @@ export async function turnOnTV() {
 
 export async function turnOffTV() {
   console.log('Turning off tv.');
-  await samsungSend('KEY_POWEROFF');
+  await cecClient.send('standby 0');
+  // await samsungSend('KEY_POWEROFF');
   console.log('Turning off tv successful.');
 }
 

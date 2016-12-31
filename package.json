@@ -16,6 +16,7 @@
     "express": "~4.0.0",
     "express-winston": "^1.2.0",
     "harmony-hub-util": "^1.0.5",
+    "lgtv2": "^1.2.0",
     "lodash": "^4.4.0",
     "node-cec": "^0.1.1",
     "samsung-remote": "^1.2.5",
