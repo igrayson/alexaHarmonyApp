@@ -18,11 +18,11 @@ export default class LgTvClient {
     }
 
     pause() {
-        lgtv.request('ssap://media.controls/pause');
+        this.lgtv.request('ssap://media.controls/pause');
     }
 
     play() {
-        lgtv.request('ssap://media.controls/play');
+        this.lgtv.request('ssap://media.controls/play');
     }
 
     switchInput(inputId) {
