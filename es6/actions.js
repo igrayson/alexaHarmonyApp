@@ -84,39 +84,42 @@ export async function turnOffAVR() {
 export async function runAVRCommand(command) {
   await awaitAVROnline();
   await harmony.runCommand(command);
+  console.log('AVR command successful:', command);
 }
 
 export async function switchTVInput(inputId) {
   let attempt = 0;
-  while (attempt++ < 10) {
+  while (attempt++ < 30) {
     try {
       console.log('Checking if TV is online...');
-      await lgtv.connect();
+      lgtv.connect();
+      console.log('Getting TV inputs');
       await lgtv.getInputs();
       console.log('TV is online!');
       break;
     } catch (error) {
-      if (attempt => 10) {
-        console.warn('Failed max retries while waiting for TV to come online.', error);
+      if (attempt >= 10) {
+        console.warn('Failed max retries while waiting for TV to come online.', attempt, error);
         throw error;
       }
       console.log('TV connect failed; waiting to retry', error);
       await Promise.delay(500);
     }
   }
+  console.log('Switching LGTV input to', inputId);
   await lgtv.switchInput(inputId);
 }
 
 export async function awaitAVROnline() {
   let attempt = 0;
-  while(attempt++ < 10) {
+  while(attempt++ < 30) {
     try {
       console.log('Checking if AVR is online..')
       await bravia.refreshActionList();
       console.log('AVR is online!');
       return;
     } catch (error) {
-      if (attempt => 10) {
+      if (attempt >= 10) {
         console.warn('Failed max retries while waiting for AVR to come online.', error);
         throw error;
       }
