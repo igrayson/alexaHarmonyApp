@@ -77,6 +77,10 @@ export async function turnOnAVR() {
   wol.wake(config.bravia_mac);
 }
 
+export async function turnOnComputer() {
+  wol.wake(config.computer_mac);
+}
+
 export async function turnOffAVR() {
   await bravia.sendCommand(IRCC_COMMANDS['STR:PowerMain']);
 }
