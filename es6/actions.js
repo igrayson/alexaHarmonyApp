@@ -74,10 +74,12 @@ export async function turnOffTV() {
 }
 
 export async function turnOnAVR() {
+  console.log('WoL-ing AVR @', config.bravia_mac)
   wol.wake(config.bravia_mac);
 }
 
 export async function turnOnComputer() {
+  console.log('WoL-ing computer @', config.computer_mac)
   wol.wake(config.computer_mac);
 }
 
