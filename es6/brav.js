@@ -55,10 +55,7 @@ export default class IRCCClient {
     };
   }
 
-  async pullActionList() {
-    if (!_.isUndefined(this.actionDefs)) {
-      return;
-    }
+  async refreshActionList() {
     this.actionDefs = { };
     const result = await agent.get(`http://${this.host}:${this.discoverPort}/actionList`)
       .set(this._headers());
@@ -75,7 +72,13 @@ export default class IRCCClient {
       }
       return defs;
     }, {});
+  }
 
+  async pullActionList() {
+    if (!_.isUndefined(this.actionDefs)) {
+      return;
+    }
+    await this.refreshActionList();
     console.log('Action definitions resolved:', this.actionDefs);
   }
 

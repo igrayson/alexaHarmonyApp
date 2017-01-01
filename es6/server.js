@@ -61,6 +61,14 @@ expressApp.get('/remote', function(req,res) {
 
 expressApp.post('/ha-bridge/on', async function(req, res) {
   switch(req.query.deviceName) {
+    case 'computer':
+      await* [actions.turnOnTV(), actions.turnOnAVR()];
+      await* [actions.switchTVInput('HDMI_1'), actions.runAVRCommand('InputTv')];
+      break;
+    case 'playstation':
+      await* [actions.turnOnTV(), actions.turnOnAVR()];
+      await* [actions.switchTVInput('HDMI_2'), actions.runAVRCommand('InputTv')];
+      break;
     case 'tv':
       await* [actions.turnOnTV(), actions.turnOnAVR()];
       break;
@@ -79,6 +87,8 @@ expressApp.post('/ha-bridge/off', async function(req, res) {
       await actions.turnOffTV();
       break;
     case 'theater':
+    case 'computer':
+    case 'playstation':
       await* [actions.turnOffTV(), actions.turnOffAVR()];
       break;
     default:

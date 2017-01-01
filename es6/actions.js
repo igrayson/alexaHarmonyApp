@@ -1,12 +1,13 @@
-import config from '../config';
-import IRCCClient, { IRCC_COMMANDS } from './brav';
-import SamsungRemote from 'samsung-remote';
 import Promise from 'bluebird';
+import SamsungRemote from 'samsung-remote';
 import _ from 'lodash';
 import wol from 'wol';
-
 import { NodeCec, CEC } from 'node-cec';
 
+import HarmonyClient from './harmony';
+import IRCCClient, { IRCC_COMMANDS } from './brav';
+import LgTvClient from './lgtv';
+import config from '../config';
 
 const wake = Promise.promisify(wol.wake);
 
@@ -28,6 +29,8 @@ cec.start( 'cec-client', '-m', '-d', '8', '-b', 'r' );
 //     hub_ip = conf.hub_ip,
 //     app_id = conf.app_id;
 
+const lgtv = new LgTvClient(config.lgtv_ip)
+const harmony = new HarmonyClient(config.harmony_ip, 'Sony AV Receiver')
 const bravia = new IRCCClient(config.bravia_ip, config.bravia_discover_port, config.bravia_command_port);
 const samsung = new SamsungRemote({ip: config.samsung_ip});
 const samsungSend = Promise.promisify(samsung.send);
@@ -76,4 +79,32 @@ export async function turnOnAVR() {
 
 export async function turnOffAVR() {
   await bravia.sendCommand(IRCC_COMMANDS['STR:PowerMain']);
+}
+
+export async function runAVRCommand(command) {
+  await awaitAVROnline();
+  await harmony.runCommand(command);
+}
+
+export async function switchTVInput(inputId) {
+  await lgtv.connect();
+  await lgtv.getInputs();
+  await lgtv.switchInput(inputId);
+}
+
+export async function awaitAVROnline() {
+  let attempt = 0;
+  while(attempt++ < 10) {
+    try {
+      await bravia.refreshActionList();
+      return;
+    } catch (error) {
+      console.log('refresh failed; waiting to retry', error);
+      await Promise.delay(500);
+    }
+  }
+}
+
+export async function sleep(millis) {
+  await Promise.delay(millis);
 }
