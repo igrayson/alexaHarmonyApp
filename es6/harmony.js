@@ -7,13 +7,16 @@ export default class HarmonyClient {
     }
 
     async runCommand(commandName) {
-        if (!this.hutil) {
-            this.hutil = await new HarmonyHubUtil(this.host);
-        }
-        console.log('Harmony connected; running command', this.deviceName, commandName);
-        const result = await this.hutil.executeCommand(true, this.deviceName, commandName);
-        if (!result) {
-            throw new Error('Failed to run command.');
+        console.log('Connecting to harmony hub...');
+        const hutil = await new HarmonyHubUtil(this.host);
+        try {
+            console.log('Harmony connected; running command', this.deviceName, commandName);
+            const result = await hutil.executeCommand(true, this.deviceName, commandName);
+            if (!result) {
+                throw new Error('Failed to run command.');
+            }
+        } finally {
+            hutil.end();
         }
     }
 }
