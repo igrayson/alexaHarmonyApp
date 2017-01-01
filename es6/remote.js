@@ -166,5 +166,27 @@ app.intent('Turnon',
         console.log('Turned on theater.');
     });
 
+app.intent('Pause',
+    {
+        "slots" : {},
+        "utterances" : ["{pause|pause netflix}"]
+    },
+    async function (req, res) {
+        console.log('Telling TV to pause');
+        await actions.pauseTV();
+        console.log('Paused tv.');
+    });
+
+app.intent('Play',
+    {
+        "slots" : {},
+        "utterances" : ["{unpause|play|resume}"]
+    },
+    async function (req, res) {
+        console.log('Telling TV to resume');
+        await actions.playTV();
+        console.log('Resumed tv.');
+    });
+
 module.exports = app;
 

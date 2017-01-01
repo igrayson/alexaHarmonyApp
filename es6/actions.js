@@ -93,6 +93,14 @@ export async function runAVRCommand(command) {
   console.log('AVR command successful:', command);
 }
 
+export async function pauseTV() {
+  await lgtv.pause();
+}
+
+export async function playTV() {
+  await lgtv.play();
+}
+
 export async function launchTVApp(appId) {
   await awaitTVOnline();
   console.log('Launching webOS app', appId);
