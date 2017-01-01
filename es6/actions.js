@@ -87,7 +87,19 @@ export async function runAVRCommand(command) {
   console.log('AVR command successful:', command);
 }
 
+export async function launchTVApp(appId) {
+  await awaitTVOnline();
+  console.log('Launching webOS app', appId);
+  await lgtv.launchApp(appId);
+}
+
 export async function switchTVInput(inputId) {
+  await awaitTVOnline();
+  console.log('Switching LGTV input to', inputId);
+  await lgtv.switchInput(inputId);
+}
+
+async function awaitTVOnline() {
   let attempt = 0;
   while (attempt++ < 30) {
     try {
@@ -96,7 +108,7 @@ export async function switchTVInput(inputId) {
       console.log('Getting TV inputs');
       await lgtv.getInputs();
       console.log('TV is online!');
-      break;
+      return;
     } catch (error) {
       if (attempt >= 10) {
         console.warn('Failed max retries while waiting for TV to come online.', attempt, error);
@@ -106,8 +118,7 @@ export async function switchTVInput(inputId) {
       await Promise.delay(500);
     }
   }
-  console.log('Switching LGTV input to', inputId);
-  await lgtv.switchInput(inputId);
+
 }
 
 export async function awaitAVROnline() {

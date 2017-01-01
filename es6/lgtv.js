@@ -21,6 +21,10 @@ export default class LgTvClient {
         this.lgtv.request('ssap://tv/switchInput', { inputId });
     }
 
+    launchApp(appId) {
+        this.lgtv.request('ssap://system.launcher/launch', { id: appId });
+    }
+
     connect() {
         return new Promise((resolve, reject) => {
             this.lgtv.connect((err, result) => {

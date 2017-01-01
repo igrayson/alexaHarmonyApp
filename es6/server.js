@@ -69,6 +69,10 @@ expressApp.post('/ha-bridge/on', async function(req, res) {
       await* [actions.turnOnTV(), actions.turnOnAVR()];
       await* [actions.switchTVInput('HDMI_2'), actions.runAVRCommand('InputTv')];
       break;
+    case 'netflix':
+      await* [actions.turnOnTV(), actions.turnOnAVR()];
+      await* [actions.launchTVApp('netflix'), actions.runAVRCommand('InputTv')];
+      break;
     case 'tv':
       await* [actions.turnOnTV(), actions.turnOnAVR()];
       break;
@@ -86,6 +90,7 @@ expressApp.post('/ha-bridge/off', async function(req, res) {
     case 'tv':
       await actions.turnOffTV();
       break;
+    case 'netflix':
     case 'theater':
     case 'computer':
     case 'playstation':
