@@ -90,9 +90,11 @@ expressApp.post('/ha-bridge/off', async function(req, res) {
     case 'tv':
       await actions.turnOffTV();
       break;
+    case 'computer':
+      await* [actions.turnOffComputer(), actions.turnOffTV(), actions.turnOffAVR()];
+      break;
     case 'netflix':
     case 'theater':
-    case 'computer':
     case 'playstation':
       await* [actions.turnOffTV(), actions.turnOffAVR()];
       break;

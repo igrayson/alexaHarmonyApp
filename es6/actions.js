@@ -7,6 +7,7 @@ import { NodeCec, CEC } from 'node-cec';
 import HarmonyClient from './harmony';
 import IRCCClient, { IRCC_COMMANDS } from './brav';
 import LgTvClient from './lgtv';
+import PcClient from './pc';
 import config from '../config';
 
 const wake = Promise.promisify(wol.wake);
@@ -29,6 +30,7 @@ cec.start( 'cec-client', '-m', '-d', '8', '-b', 'r' );
 //     hub_ip = conf.hub_ip,
 //     app_id = conf.app_id;
 
+const pc = new PcClient(config.computer_ip);
 const lgtv = new LgTvClient(config.lgtv_ip)
 const harmony = new HarmonyClient(config.harmony_ip, 'Sony AV Receiver')
 const bravia = new IRCCClient(config.bravia_ip, config.bravia_discover_port, config.bravia_command_port);
@@ -81,6 +83,11 @@ export async function turnOnAVR() {
 export async function turnOnComputer() {
   console.log('WoL-ing computer @', config.computer_mac)
   wol.wake(config.computer_mac);
+}
+
+export async function turnOffComputer() {
+  console.log('Sending sleep command to computer', config.computer_ip)
+  await pc.putToSleep();
 }
 
 export async function turnOffAVR() {

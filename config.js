@@ -8,5 +8,6 @@ export default {
   bravia_mac: 'ac:9b:0a:83:34:2d',
   bravia_discover_port: 50002,
   bravia_command_port: 50001,
+  computer_ip: '192.168.0.23',
   computer_mac: '78:24:af:41:a7:ac',
 };
