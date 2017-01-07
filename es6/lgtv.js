@@ -2,7 +2,7 @@ import lgtv2 from 'lgtv2';
 
 export default class LgTvClient {
     constructor(host) {
-        this.lgtv = lgtv2({ url: `ws://${host}:3000`});
+        this.host = host;
     }
 
     getInputs() {
@@ -34,6 +34,14 @@ export default class LgTvClient {
     }
 
     connect() {
+        if (this.lgtv) {
+            try {
+                this.lgtv.disconnect();
+            } catch (error) {
+                console.warn('Failed to disconnect existing lgtv client', error);
+            }
+        }
+        this.lgtv = lgtv2({ url: `ws://${this.host}:3000`});
         return new Promise((resolve, reject) => {
             this.lgtv.connect((err, result) => {
                 if (err) {
