@@ -128,10 +128,10 @@ export async function switchTVInput(inputId) {
 
 async function awaitTVOnline() {
   let attempt = 0;
+  console.log('Checking if TV is online...');
+  lgtv.connect();
   while (attempt++ < 30) {
     try {
-      console.log('Checking if TV is online...');
-      await lgtv.connect();
       console.log('Getting TV inputs');
       await lgtv.getInputs();
       console.log('TV is online!');

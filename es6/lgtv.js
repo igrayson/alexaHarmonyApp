@@ -40,14 +40,5 @@ export default class LgTvClient {
     connect() {
         console.log('Connecting to', this.host);
         this.lgtv = lgtv2({ url: `ws://${this.host}:3000`});
-        return new Promise((resolve, reject) => {
-            this.lgtv.connect((err, result) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(result);
-                }
-            });
-        });
     }
 }
