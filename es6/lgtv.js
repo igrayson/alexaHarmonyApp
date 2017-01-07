@@ -34,18 +34,11 @@ export default class LgTvClient {
     }
 
     async turnOff() {
-        await this.connect();
         this.lgtv.request('ssap://system/turnOff');
     }
 
     connect() {
-        if (this.lgtv) {
-            try {
-                this.lgtv.disconnect();
-            } catch (error) {
-                console.warn('Failed to disconnect existing lgtv client', error);
-            }
-        }
+        console.log('Connecting to', this.host);
         this.lgtv = lgtv2({ url: `ws://${this.host}:3000`});
         return new Promise((resolve, reject) => {
             this.lgtv.connect((err, result) => {
