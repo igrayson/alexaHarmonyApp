@@ -64,25 +64,29 @@ export async function muteVolume() {
 }
 
 export async function turnOnTV() {
-  console.log('Turning on tv (cec-client on 0).');
-  cecClient.send('on 0');
+  // console.log('Turning on tv (cec-client on 0).');
+  // cecClient.send('on 0');
+  console.log('WoL-ing TV @', config.lgtv_mac)
+  await wake(config.lgtv_mac);
 }
 
 export async function turnOffTV() {
+  await awaitTVOnline();
   console.log('Turning off tv.');
-  await cecClient.send('standby 0');
+  await lgtv.turnOff();
+  // await cecClient.send('standby 0');
   // await samsungSend('KEY_POWEROFF');
   console.log('Turning off tv successful.');
 }
 
 export async function turnOnAVR() {
   console.log('WoL-ing AVR @', config.bravia_mac)
-  wol.wake(config.bravia_mac);
+  await wake(config.bravia_mac);
 }
 
 export async function turnOnComputer() {
   console.log('WoL-ing computer @', config.computer_mac)
-  wol.wake(config.computer_mac);
+  await wake(config.computer_mac);
 }
 
 export async function turnOffComputer() {
@@ -101,10 +105,12 @@ export async function runAVRCommand(command) {
 }
 
 export async function pauseTV() {
+  await awaitTVOnline();
   await lgtv.pause();
 }
 
 export async function playTV() {
+  await awaitTVOnline();
   await lgtv.play();
 }
 

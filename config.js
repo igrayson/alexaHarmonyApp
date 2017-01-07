@@ -4,6 +4,7 @@ export default {
   samsung_ip: '192.168.0.12',
   harmony_ip: '192.168.0.39',
   lgtv_ip: '192.168.0.42',
+  lgtv_mac: '14:c9:13:28:cc:cd',
   bravia_ip: '192.168.0.13',
   bravia_mac: 'ac:9b:0a:83:34:2d',
   bravia_discover_port: 50002,

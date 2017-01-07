@@ -33,6 +33,11 @@ export default class LgTvClient {
         this.lgtv.request('ssap://system.launcher/launch', { id: appId });
     }
 
+    async turnOff() {
+        await this.connect();
+        this.lgtv.request('ssap://system/turnOff');
+    }
+
     connect() {
         if (this.lgtv) {
             try {
