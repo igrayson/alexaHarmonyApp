@@ -38,7 +38,11 @@ export default class LgTvClient {
     }
 
     connect() {
-        console.log('Connecting to', this.host);
+        if (this.lgtv) {
+            console.log('Already connected to lgtv', this.host);
+            return;
+        }
+        console.log('Connecting to lgtv', this.host);
         this.lgtv = lgtv2({ url: `ws://${this.host}:3000`});
     }
 }
