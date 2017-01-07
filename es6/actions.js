@@ -131,7 +131,7 @@ async function awaitTVOnline() {
   while (attempt++ < 30) {
     try {
       console.log('Checking if TV is online...');
-      lgtv.connect();
+      await lgtv.connect();
       console.log('Getting TV inputs');
       await lgtv.getInputs();
       console.log('TV is online!');
