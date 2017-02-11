@@ -63,15 +63,18 @@ expressApp.post('/ha-bridge/on', async function(req, res) {
   switch(req.query.deviceName) {
     case 'computer':
       await* [actions.turnOnTV(), actions.turnOnAVR(), actions.turnOnComputer()];
-      await* [actions.switchTVInput('HDMI_1'), actions.runAVRCommand('InputTv')];
+      actions.switchTVInput('HDMI_1').catch(e => console.warn('Failed to switch HDMI_1', e));
+      actions.runAVRCommand('InputTv').catch(e => console.warn('Failed to run InputTv', e));
       break;
     case 'playstation':
       await* [actions.turnOnTV(), actions.turnOnAVR()];
-      await* [actions.switchTVInput('HDMI_2'), actions.runAVRCommand('InputTv')];
+      actions.switchTVInput('HDMI_2').catch(e => console.warn('Failed to switch HDMI_2', e));
+      actions.runAVRCommand('InputTv').catch(e => console.warn('Failed to run InputTv', e));
       break;
     case 'netflix':
       await* [actions.turnOnTV(), actions.turnOnAVR()];
-      await* [actions.launchTVApp('netflix'), actions.runAVRCommand('InputTv')];
+      actions.launchTVApp('netflix').catch(e => console.warn('Failed to launch netflix', e));
+      actions.runAVRCommand('InputTv').catch(e => console.warn('Failed to run InputTv', e));
       break;
     case 'tv':
       await* [actions.turnOnTV(), actions.turnOnAVR()];
